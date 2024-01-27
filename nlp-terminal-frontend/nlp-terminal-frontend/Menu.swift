@@ -32,7 +32,22 @@ struct Menu: View {
     }
     
     func submitAction() {
-        print(userInput)
+        guard let url = URL(string: "http://127.0.0.1:8000") else {
+            print("Invalid URL")
+            return
+        }
+
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                print("Error: \(error)")
+            } else if let data = data {
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("\(responseString)")
+                }
+            }
+        }
+
+        task.resume()
     }
     
     func activateMicrophone() {
