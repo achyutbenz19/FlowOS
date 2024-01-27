@@ -1,21 +1,20 @@
-//
-//  ContentView.swift
-//  nlp-terminal-frontend
-//
-//  Created by Achyut Krishna Byanjankar on 1/26/24.
-//
-
 import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ZStack {
+            VStack {
+                HStack {
+                    Image(systemName: "sparkles")
+                    Text("Simplifying Commands with Natural Language")
+                        .font(.headline)
+                        .fontWeight(.bold)
+                        .multilineTextAlignment(.center)
+                }.padding(.top, 40).padding(.horizontal, 20)
+                Spacer()
+            }
+            .frame(height: 100.0)
         }
-        .padding()
     }
 }
 

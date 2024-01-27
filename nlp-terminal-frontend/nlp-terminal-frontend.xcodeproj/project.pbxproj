@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A79ACA0E2B64C7E1007EE88A /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79ACA0D2B64C7E1007EE88A /* Menu.swift */; };
 		A7C996232B648D6300256A00 /* nlp_terminal_frontendApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C996222B648D6300256A00 /* nlp_terminal_frontendApp.swift */; };
 		A7C996252B648D6300256A00 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C996242B648D6300256A00 /* ContentView.swift */; };
 		A7C996272B648D6600256A00 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A7C996262B648D6600256A00 /* Assets.xcassets */; };
@@ -34,6 +35,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A79ACA0D2B64C7E1007EE88A /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
 		A7C9961F2B648D6300256A00 /* nlp-terminal-frontend.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "nlp-terminal-frontend.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7C996222B648D6300256A00 /* nlp_terminal_frontendApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nlp_terminal_frontendApp.swift; sourceTree = "<group>"; };
 		A7C996242B648D6300256A00 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 				A7C996262B648D6600256A00 /* Assets.xcassets */,
 				A7C9962B2B648D6600256A00 /* nlp_terminal_frontend.entitlements */,
 				A7C996282B648D6600256A00 /* Preview Content */,
+				A79ACA0D2B64C7E1007EE88A /* Menu.swift */,
 			);
 			path = "nlp-terminal-frontend";
 			sourceTree = "<group>";
@@ -259,6 +262,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A79ACA0E2B64C7E1007EE88A /* Menu.swift in Sources */,
 				A7C996252B648D6300256A00 /* ContentView.swift in Sources */,
 				A7C996232B648D6300256A00 /* nlp_terminal_frontendApp.swift in Sources */,
 			);
