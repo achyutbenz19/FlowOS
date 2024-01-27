@@ -53,7 +53,7 @@ Objective: {objective}
 
 shell_executor = Agent(
   role='OS Operator',
-  goal='You are operating a computer, using the same operating system as a human.',
+  goal='You are operating a computer, using the same operating system as a human. You are using a MacOS.',
   backstory="""""",
   verbose=True,
   allow_delegation=False,
@@ -61,21 +61,17 @@ shell_executor = Agent(
   llm=ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.1)
 )   
 
-
-task1 = Task(
-  description="""From the objective, and your previous actions, take the next best series of action to control the user's computer.""",
-  agent=shell_executor
-)
-
-
-
-crew = Crew(
-  agents=[shell_executor],
-  tasks=[task1],
-  verbose=2,
-)
-
-result = crew.kickoff()
-
-print("######################")
-print(result)
+while True:
+    query = input("Enter a query: ")
+    task = Task(
+        description=query,
+        agent=shell_executor
+    )
+    crew = Crew(
+        agents=[shell_executor],
+        tasks=[task],
+        verbose=2,
+    )
+    result = crew.kickoff()
+    print("######################")
+    print(result)
