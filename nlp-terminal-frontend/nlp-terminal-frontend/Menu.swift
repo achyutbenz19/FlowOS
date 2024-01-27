@@ -14,14 +14,16 @@ struct Menu: View {
             Section {
                 HStack {
                     
-                    Button("Submit") {
+                    Button(action: {
                         submitAction()
+                    }) {
+                        Image(systemName: "paperplane.fill")
                     }
                     
                     Button(action: {
                         activateMicrophone()
                     }) {
-                        Image(systemName: "mic")
+                        Image(systemName: "mic.fill")
                     }
                     
                 }
