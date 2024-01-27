@@ -1,6 +1,9 @@
 fastapi
 uvicorn[standard]
-crewai
+langchain-openai
+langchain
+langchain-core
+langchain-community
 langchain-experimental
 python-dotenv
 duckduckgo-search
