@@ -1,7 +1,8 @@
 from crewai import Agent, Task, Crew, Process
 from langchain.tools.shell import ShellTool
 from langchain_openai.chat_models import ChatOpenAI
-
+from dotenv import load_dotenv
+load_dotenv()
 shell_tool = ShellTool()
 
 SYSTEM_PROMPT_MAC = """
@@ -50,8 +51,6 @@ Objective: {objective}
 """
 
 
-
-
 shell_executor = Agent(
   role='OS Operator',
   goal='You are operating a computer, using the same operating system as a human.',
@@ -59,7 +58,7 @@ shell_executor = Agent(
   verbose=True,
   allow_delegation=False,
   tools=[shell_tool],
-  llm=ChatOpenAI(model_name="gpt-3.5", temperature=0.7)
+  llm=ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.1)
 )   
 
 
@@ -67,6 +66,7 @@ task1 = Task(
   description="""From the objective, and your previous actions, take the next best series of action to control the user's computer.""",
   agent=shell_executor
 )
+
 
 
 crew = Crew(

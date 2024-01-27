@@ -2,3 +2,4 @@ fastapi
 uvicorn[standard]
 crewai
 langchain-experimental
+python-dotenv
