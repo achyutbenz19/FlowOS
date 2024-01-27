@@ -32,12 +32,22 @@ struct Menu: View {
     }
     
     func submitAction() {
-        guard let url = URL(string: "http://127.0.0.1:8000") else {
+        guard let url = URL(string: "http://127.0.0.1:8000/query") else {
             print("Invalid URL")
             return
         }
+        
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: ["question": userInput]) else {
+            print("Error encoding JSON data")
+            return
+        }
 
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = jsonData
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 print("Error: \(error)")
             } else if let data = data {
@@ -49,6 +59,7 @@ struct Menu: View {
 
         task.resume()
     }
+
     
     func activateMicrophone() {
         print("Microphone Activated!")
