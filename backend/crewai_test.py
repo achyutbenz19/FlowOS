@@ -1,9 +1,12 @@
-from crewai import Agent, Task, Crew, Process
+from crewai import Agent, Task, Crew
 from langchain.tools.shell import ShellTool
 from langchain_openai.chat_models import ChatOpenAI
 from dotenv import load_dotenv
+from langchain.tools.ddg_search import DuckDuckGoSearchRun
+
 load_dotenv()
 shell_tool = ShellTool()
+duckduckgo_search = DuckDuckGoSearchRun()
 
 SYSTEM_PROMPT_MAC = """
 You are operating a computer, using the same operating system as a human.
@@ -56,10 +59,35 @@ shell_executor = Agent(
   goal='You are operating a computer, using the same operating system as a human. You are using a MacOS.',
   backstory="""""",
   verbose=True,
-  allow_delegation=False,
-  tools=[shell_tool],
+  allow_delegation=True,
+  tools=[shell_tool, duckduckgo_search],
   llm=ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.1)
 )   
+
+search_executor = Agent(
+    role='Search Executor',
+    goal='You are searching the internet for answers to questions.',
+    backstory="""""",
+    verbose=True,
+    allow_delegation=True,
+    tools=[duckduckgo_search],
+    llm=ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.1)
+)
+
+manager_agent = Agent(
+    role='Task Manager',
+    goal='To manage, delegate, and create a list of tasks that are more managaable for the other agents to complete.',
+    backstory="""""",
+    verbose=True,
+    allow_delegation=False,
+    tools=[],
+    llm=ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.1)
+)
+
+manager_task = Task(
+    role='Task Manager',
+    description='Break down the user\'s request into smaller, more manageable tasks for the other agents to complete.',
+)
 
 while True:
     query = input("Enter a query: ")
@@ -68,10 +96,11 @@ while True:
         agent=shell_executor
     )
     crew = Crew(
-        agents=[shell_executor],
+        agents=[manager_agent, shell_executor, search_executor],
         tasks=[task],
         verbose=2,
     )
     result = crew.kickoff()
     print("######################")
     print(result)
+
