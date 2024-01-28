@@ -44,6 +44,7 @@ async def set_config(data: AgentConfig):
 
 class Query(BaseModel):
     question: str
+    is_voice: bool = True
 
 @app.post('/query')
 async def query(data: Query):
@@ -51,7 +52,7 @@ async def query(data: Query):
         question = record_audio("audio.wav")
     else:
         question = data.question
-    response = route_agent.agent.chat(question)
+    response = route_agent.agent.chat(question, is_voice=data.is_voice)
     return {"response" : response}
 
 @app.get('/chat_history')

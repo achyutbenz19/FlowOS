@@ -150,7 +150,8 @@ class Agent:
         self, 
         query: str, 
         save_chat_history: bool = True, 
-        use_chat_history: bool = True
+        use_chat_history: bool = True,
+        is_voice: bool = True
     ):
         if "start workflow" in query.lower():
             workflow_name = query.split("start workflow")[1].strip()
@@ -180,7 +181,8 @@ class Agent:
         if save_chat_history:
             self.chat_memory.save_context({'input': query}, {'output': output['output']})
         final_response = output['output']
-        speak(final_response, self.voice)
+        if is_voice:
+            speak(final_response, self.voice)
         return {
             'input': query,
             'output': final_response
