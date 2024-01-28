@@ -1,9 +1,12 @@
+import sys
+sys.path.append("")
 import platform
 from typing import Optional, List
 from pathlib import Path
 from langchain import hub
 from langchain.agents import AgentExecutor, create_openai_tools_agent
-from langchain_community.tools import DuckDuckGoSearchRun, ShellTool, YouTubeSearchTool, ElevenLabsText2SpeechTool
+from langchain_community.tools import DuckDuckGoSearchRun, ShellTool, YouTubeSearchTool, tool
+from langchain_community.utilities.stackexchange import StackExchangeAPIWrapper
 from langchain_openai import ChatOpenAI
 from langchain.memory import ConversationBufferWindowMemory
 from langchain.storage import LocalFileStore
@@ -12,6 +15,13 @@ from pydantic import BaseModel, Field
 from backend.tts import speak
 from dotenv import load_dotenv
 load_dotenv()
+
+def stack_exchange_search(query: str):
+    """
+    A forum search engine. Useful for when you need to answer questions about programming and errors.
+    """
+    wrapper = StackExchangeAPIWrapper()
+    return wrapper.run(query)
 
 def _get_platform() -> str:
     """Get platform."""
@@ -23,11 +33,13 @@ def _get_platform() -> str:
 search_tool = DuckDuckGoSearchRun()
 shell_tool = ShellTool()
 youtube_tool = YouTubeSearchTool()
+stack_exchange_tool = tool(stack_exchange_search)
 
 tool_map = {
     "shell": shell_tool,
     "youtube": youtube_tool,
-    "search": search_tool
+    "search": search_tool,
+    "stack_exchange": stack_exchange_tool
 }
 
 

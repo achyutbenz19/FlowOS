@@ -13,3 +13,4 @@ elevenlabs
 pyaudio
 pydub
 gradio
+stackapi
