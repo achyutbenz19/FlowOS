@@ -35,7 +35,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A79ACA0D2B64C7E1007EE88A /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
+		A79ACA0D2B64C7E1007EE88A /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; tabWidth = 12; };
 		A7C9961F2B648D6300256A00 /* nlp-terminal-frontend.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "nlp-terminal-frontend.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7C996222B648D6300256A00 /* nlp_terminal_frontendApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nlp_terminal_frontendApp.swift; sourceTree = "<group>"; };
 		A7C996242B648D6300256A00 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
