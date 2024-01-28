@@ -27,7 +27,6 @@ struct Menu: View {
             }
         }.font(.system(size: 20))
         .frame(width: 400, height: 50)
-        .padding(8)
     }
     
     func handleSubmit() {
@@ -73,7 +72,7 @@ struct CustomTextFieldWithButton: View {
             .textFieldStyle(PlainTextFieldStyle())
             .padding([.horizontal], 4)
             .cornerRadius(200)
-            .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.gray))
+            .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.clear))
             .padding([.leading], 8)
             .overlay(
                 HStack {
@@ -86,11 +85,10 @@ struct CustomTextFieldWithButton: View {
                         }
                     }) {
                         Image(systemName: isRecording ? "stop.circle.fill" : (userInput.isEmpty ? "mic.fill" : "paperplane.fill"))
-                            .font(.system(size: 12))
+                            .font(.system(size: 16))
                             .padding(.trailing, 8)
                     }.buttonStyle(PlainButtonStyle())
                 }
-                .padding(.trailing, 8)
             )
         .padding(.trailing, 10)
     }
