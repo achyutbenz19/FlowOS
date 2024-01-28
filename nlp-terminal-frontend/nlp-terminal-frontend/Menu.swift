@@ -67,13 +67,18 @@ struct CustomTextFieldWithButton: View {
     var activateMicrophone: () -> Void
 
     var body: some View {
-        TextField("", text: $userInput, prompt: Text("Ask anything"))
+        TextField("", text: $userInput, prompt: Text("Ask Anything").italic())
             .frame(height: 35)
             .textFieldStyle(PlainTextFieldStyle())
             .padding([.horizontal], 4)
             .cornerRadius(200)
             .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.clear))
             .padding([.leading], 8)
+            .onSubmit { // Add onSubmit modifier
+                            if !userInput.isEmpty {
+                                submitAction()
+                            }
+                        }
             .overlay(
                 HStack {
                     Spacer()
