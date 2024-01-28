@@ -8,10 +8,13 @@ struct Menu: View {
     var body: some View {
         Form {
             Section {
-                CustomTextFieldWithButton(userInput: $userInput, isRecording: $isRecording, submitAction: {
-                    print("Submit button tapped")
-                    // Add your submit action logic here
-                }, activateMicrophone: {
+                CustomTextFieldWithButton(
+                    userInput: $userInput,
+                    isRecording: $isRecording,
+                    submitAction: {
+                        handleSubmit()
+                    },
+                    activateMicrophone: {
                     if isRecording {
                         print("Recording stopped")
                     } else {
@@ -26,6 +29,36 @@ struct Menu: View {
         .frame(width: 400, height: 50)
         .padding(8)
     }
+    
+    func handleSubmit() {
+        guard let url = URL(string: "http://127.0.0.1:8000/query") else {
+            print("Invalid URL")
+            return
+        }
+
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: ["question": userInput]) else {
+            print("Error encoding JSON data")
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = jsonData
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error: (error)")
+            } else if let data = data {
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("(responseString)")
+                }
+            }
+        }
+
+        task.resume()
+    }
+    
 }
 
 struct CustomTextFieldWithButton: View {
@@ -53,7 +86,7 @@ struct CustomTextFieldWithButton: View {
                         }
                     }) {
                         Image(systemName: isRecording ? "stop.circle.fill" : (userInput.isEmpty ? "mic.fill" : "paperplane.fill"))
-                            .font(.system(size: 12)) // Adjust the font size here
+                            .font(.system(size: 12))
                             .padding(.trailing, 8)
                     }.buttonStyle(PlainButtonStyle())
                 }
@@ -61,6 +94,7 @@ struct CustomTextFieldWithButton: View {
             )
         .padding(.trailing, 10)
     }
+    
 }
 
 #Preview {
