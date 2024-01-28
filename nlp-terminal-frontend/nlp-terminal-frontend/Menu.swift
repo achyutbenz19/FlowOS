@@ -6,6 +6,8 @@ struct Menu: View {
     @State private var isRecording: Bool = false
     @State private var isLoading: Bool = false
     @State private var responseText: String = ""
+    @State private var loadingText: String = "Typing"
+    @State private var timer: Timer?
 
     var body: some View {
         ScrollView {
@@ -25,23 +27,47 @@ struct Menu: View {
                 )
                 .padding(.vertical, 10)
                 .background(Color.clear)
+                
+                if isLoading && responseText.isEmpty {
+                    Divider()
 
-                if !responseText.isEmpty {
+                    Text(loadingText)
+                        .italic()
+                        .foregroundColor(.gray)
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 10)
+                        .onAppear {
+                            startLoadingAnimation()
+                        }
+                        .onDisappear {
+                            stopLoadingAnimation()
+                        }
+
+                    Divider()
+                }
+                
+                if !isLoading && !responseText.isEmpty {
                     Divider()
                 }
                 
                 if !responseText.isEmpty {
+                    Divider()
+
                     ScrollView {
                         Text(responseText)
-                            .padding(10)
-                            .frame(width: 400, height: 300)
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 10)
+                            .padding(.bottom, 5)
+                            .lineSpacing(8)
                     }
                 }
             }
+            
             .font(.system(size: 16))
-            .frame(width: 400, height: responseText.isEmpty ? 55 : 355)
+            .frame(width: 400)
         }
     }
+    
 
     func handleSubmit(speech: Bool) {
         guard let url = URL(string: "http://127.0.0.1:8000/query") else {
@@ -59,6 +85,7 @@ struct Menu: View {
         }
 
         isLoading = true
+        responseText = "" // Reset responseText to empty string
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -77,13 +104,13 @@ struct Menu: View {
                        let responseDict = jsonResponse["response"] as? [String: Any],
                        let response = responseDict["output"] as? String {
                            responseText = response
-                            
                     }
                 }
             }
         }
         task.resume()
     }
+
 
     func activeMicrophone() {
         print("Active")
@@ -92,6 +119,20 @@ struct Menu: View {
     func inactiveMicrophone() {
         print("Inactive")
     }
+    func startLoadingAnimation() {
+            timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
+                if loadingText.count < 10 {
+                    loadingText += "."
+                } else {
+                    loadingText = "Typing"
+                }
+            }
+        }
+
+        func stopLoadingAnimation() {
+            timer?.invalidate()
+            timer = nil
+        }
 }
 
 struct CustomTextFieldWithButton: View {
@@ -104,7 +145,7 @@ struct CustomTextFieldWithButton: View {
         TextField("", text: $userInput, prompt: Text("Ask Flow"))
             .frame(height: 35)
             .textFieldStyle(PlainTextFieldStyle())
-            .padding([.horizontal], 4)
+            .padding([.horizontal], 8)
             .cornerRadius(200)
             .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.clear))
             .padding([.leading], 8)
