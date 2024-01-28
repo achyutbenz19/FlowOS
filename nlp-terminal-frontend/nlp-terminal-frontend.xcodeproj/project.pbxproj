@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A70F7AC02B66502F00122152 /* Workflows.swift in Sources */ = {isa = PBXBuildFile; fileRef = A70F7ABF2B66502F00122152 /* Workflows.swift */; };
 		A79ACA0E2B64C7E1007EE88A /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79ACA0D2B64C7E1007EE88A /* Menu.swift */; };
 		A7C996232B648D6300256A00 /* nlp_terminal_frontendApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C996222B648D6300256A00 /* nlp_terminal_frontendApp.swift */; };
 		A7C996252B648D6300256A00 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C996242B648D6300256A00 /* ContentView.swift */; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A70F7ABF2B66502F00122152 /* Workflows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workflows.swift; sourceTree = "<group>"; };
 		A79ACA0D2B64C7E1007EE88A /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; tabWidth = 12; };
 		A7C9961F2B648D6300256A00 /* nlp-terminal-frontend.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "nlp-terminal-frontend.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7C996222B648D6300256A00 /* nlp_terminal_frontendApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nlp_terminal_frontendApp.swift; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 		A7C996162B648D6300256A00 = {
 			isa = PBXGroup;
 			children = (
+				A70F7ABF2B66502F00122152 /* Workflows.swift */,
 				A7C996212B648D6300256A00 /* nlp-terminal-frontend */,
 				A7C996332B648D6600256A00 /* nlp-terminal-frontendTests */,
 				A7C9963D2B648D6600256A00 /* nlp-terminal-frontendUITests */,
@@ -262,6 +265,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A70F7AC02B66502F00122152 /* Workflows.swift in Sources */,
 				A79ACA0E2B64C7E1007EE88A /* Menu.swift in Sources */,
 				A7C996252B648D6300256A00 /* ContentView.swift in Sources */,
 				A7C996232B648D6300256A00 /* nlp_terminal_frontendApp.swift in Sources */,
