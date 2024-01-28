@@ -14,13 +14,11 @@ struct Menu: View {
                     userInput: $userInput,
                     isRecording: $isRecording,
                     submitAction: {
-                        handleSubmit()
+                        handleSubmit(speech: false)
                     },
                     activateMicrophone: {
-                        if isRecording {
-                            activeMicrophone()
-                        } else {
-                            inactiveMicrophone()
+                        if !isRecording {
+                            handleSubmit(speech: true)
                         }
                         isRecording.toggle()
                     }
@@ -45,14 +43,17 @@ struct Menu: View {
         }
     }
 
-
-    func handleSubmit() {
+    func handleSubmit(speech: Bool) {
         guard let url = URL(string: "http://127.0.0.1:8000/query") else {
             print("Invalid URL")
             return
         }
 
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: ["question": userInput]) else {
+        var requestBody: [String: Any] = ["question": userInput]
+
+        requestBody["is_voice"] = speech ? true : false
+
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: requestBody) else {
             print("Error encoding JSON data")
             return
         }
@@ -73,8 +74,10 @@ struct Menu: View {
                     if let responseString = String(data: data, encoding: .utf8),
                        let jsonData = responseString.data(using: .utf8),
                        let jsonResponse = try? JSONSerialization.jsonObject(with: jsonData) as? [String: Any],
-                       let response = jsonResponse["response"] as? String {
+                       let responseDict = jsonResponse["response"] as? [String: Any],
+                       let response = responseDict["output"] as? String {
                            responseText = response
+                            
                     }
                 }
             }
