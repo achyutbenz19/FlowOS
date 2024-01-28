@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from langchain_agent import Agent
+from backend.agent import Agent
 
 
 app = FastAPI()
@@ -26,5 +26,9 @@ class Query(BaseModel):
 
 @app.post('/query')
 async def query(data: Query):
-    response = agent.chat(data.question)['output']
+    response = agent.chat(data.question)
     return {"response" : response}
+
+@app.get('/chat_history')
+async def chat_history():
+    return agent.get_chat_history()

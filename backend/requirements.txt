@@ -8,3 +8,5 @@ langchain-experimental
 python-dotenv
 duckduckgo-search
 langchainhub
+youtube_search
+elevenlabs
