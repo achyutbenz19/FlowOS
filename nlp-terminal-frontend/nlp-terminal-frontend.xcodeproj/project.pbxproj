@@ -79,7 +79,6 @@
 		A7C996162B648D6300256A00 = {
 			isa = PBXGroup;
 			children = (
-				A70F7ABF2B66502F00122152 /* Workflows.swift */,
 				A7C996212B648D6300256A00 /* nlp-terminal-frontend */,
 				A7C996332B648D6600256A00 /* nlp-terminal-frontendTests */,
 				A7C9963D2B648D6600256A00 /* nlp-terminal-frontendUITests */,
@@ -100,6 +99,7 @@
 		A7C996212B648D6300256A00 /* nlp-terminal-frontend */ = {
 			isa = PBXGroup;
 			children = (
+				A70F7ABF2B66502F00122152 /* Workflows.swift */,
 				A7C996222B648D6300256A00 /* nlp_terminal_frontendApp.swift */,
 				A7C996242B648D6300256A00 /* ContentView.swift */,
 				A7C996262B648D6600256A00 /* Assets.xcassets */,
