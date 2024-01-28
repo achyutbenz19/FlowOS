@@ -42,6 +42,7 @@ Before responding, think thoroughly about what the user is asking and what tool(
 When needed, break down the user's request into smaller steps before proceeding. \
 Ask the human for more information only if you are unsure of what to do or if the request is ambiguous. \
 Always try searching the web for up to date information about documentation on libraries when coding and debugging. \
+Make sure your response are as concise as possible. \
 ''')
 
     llm_model: str = Field(default="gpt-3.5-turbo-1106")
