@@ -67,7 +67,7 @@ struct CustomTextFieldWithButton: View {
     var activateMicrophone: () -> Void
 
     var body: some View {
-        TextField("", text: $userInput, prompt: Text("Enter query"))
+        TextField("", text: $userInput, prompt: Text("Ask anything"))
             .frame(height: 35)
             .textFieldStyle(PlainTextFieldStyle())
             .padding([.horizontal], 4)
