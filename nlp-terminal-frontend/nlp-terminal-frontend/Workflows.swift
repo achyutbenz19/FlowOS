@@ -4,8 +4,14 @@ import Foundation
 struct Workflows: View {
     var body: some View {
         VStack {
-            Text("Workflows").bold()
+            
+            HStack {
+                Text("Workflows").bold()
+                Spacer()
+            }.padding(.leading, 8)
+            
             Divider()
+            
             VStack {
                 SingleWorkflow(workflowName: "Achyut's Work")
             }
@@ -25,15 +31,19 @@ struct SingleWorkflow: View {
             Image(systemName: "cube.transparent")
                 .font(Font.system(size: 14))
                 .foregroundColor(Color.white)
-            
             Text(workflowName)
                 .foregroundColor(Color.white)
+            Spacer()
         }
-        
         .padding(.vertical, 4)
-        .padding(.horizontal, 12)
-        .background(RoundedRectangle(cornerRadius: 6))
-        
+        .padding(.horizontal, 8)
+        .background(RoundedRectangle(cornerRadius: 6)
+                        .fill(isHovered ? Color.gray : Color.clear))
+        .onHover { hovering in
+            withAnimation {
+                self.isHovered = hovering
+            }
+        }
     }
 }
 
