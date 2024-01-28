@@ -10,3 +10,6 @@ duckduckgo-search
 langchainhub
 youtube_search
 elevenlabs
+pyaudio
+pydub
+gradio

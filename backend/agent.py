@@ -3,51 +3,60 @@ from typing import Optional, List
 from pathlib import Path
 from langchain import hub
 from langchain.agents import AgentExecutor, create_openai_tools_agent
-from langchain_community.tools import HumanInputRun, DuckDuckGoSearchRun, ShellTool, YouTubeSearchTool, ElevenLabsText2SpeechTool
+from langchain_community.tools import DuckDuckGoSearchRun, ShellTool, YouTubeSearchTool, ElevenLabsText2SpeechTool
 from langchain_openai import ChatOpenAI
 from langchain.memory import ConversationBufferWindowMemory
 from langchain.storage import LocalFileStore
 from langchain_core.prompts import SystemMessagePromptTemplate, PromptTemplate, ChatPromptTemplate, MessagesPlaceholder, HumanMessagePromptTemplate
 from pydantic import BaseModel, Field
+from backend.tts import speak
 from dotenv import load_dotenv
 load_dotenv()
 
+def _get_platform() -> str:
+    """Get platform."""
+    system = platform.system()
+    if system == "Darwin":
+        return "MacOS"
+    return system
 
 search_tool = DuckDuckGoSearchRun()
-tts_tool = ElevenLabsText2SpeechTool()
 shell_tool = ShellTool()
-human_tool = HumanInputRun()
 youtube_tool = YouTubeSearchTool()
 
 tool_map = {
-    "human": human_tool,
     "shell": shell_tool,
     "youtube": youtube_tool,
     "search": search_tool
 }
 
+
 class AgentConfig(BaseModel):
     system_prompt: str = Field(default=f'''\
-You are Flow, an assistant that helps the user navigate through their computer and the internet. \
-You are powered by multiple different tools that you will use to help the user complete tasks. \
-The user is running on {platform.system()}. \
+You are Flow, a coding assistant that assists the human in developing programs and applications. \
+You are powered by multiple different tools that you will use to help the user complete tasks \
+Tasks can include things like creating programs, opening up the IDE, searching the web for documentation \
+and more. \
+Remeber. The user is running on {_get_platform()}. \
 Before responding, think thoroughly about what the user is asking and what tool(s) would be best to use. \
 When needed, break down the user's request into smaller steps before proceeding. \
 Ask the human for more information only if you are unsure of what to do or if the request is ambiguous. \
+Always try searching the web for up to date information about documentation on libraries when coding and debugging. \
 ''')
 
     llm_model: str = Field(default="gpt-3.5-turbo-1106")
 
     llm_temperature: float = Field(default=0.1, ge=0, le=1)
 
-    chat_memory_k: int = Field(default=5)
+    chat_memory_k: int = Field(default=6)
 
-    tools: List[str] = ["human", "shell", "youtube", "search"]
+    tools: List[str] = ["shell", "youtube", "search"]
 
     workflows_db_path: str = "workflows_db"
 
     verbose: bool = True
 
+    voice: str = "Rachel"
 
 class Agent:
     def __init__(
@@ -59,6 +68,7 @@ class Agent:
             k=self.config.chat_memory_k,
             return_messages=True
         )
+        self.voice = self.config.voice
         self.prompt: ChatPromptTemplate = hub.pull("hwchase17/openai-tools-agent")
         self.prompt.messages = [
             SystemMessagePromptTemplate(prompt=PromptTemplate(input_variables=[], template=self.config.system_prompt)), 
@@ -102,11 +112,12 @@ class Agent:
 
         self.workflow_name = workflow_name
         message = f"Workflow {workflow_name} started! Recording..."
+        print(message)
         return message
 
     def end_workflow(self):
         if not self.in_workflow:
-            message = "Not in Workflow! Ignoring request."
+            message = "You are not currently in a workflow. Please start one first."
             print(message)
             return message
         
@@ -168,7 +179,12 @@ class Agent:
 
         if save_chat_history:
             self.chat_memory.save_context({'input': query}, {'output': output['output']})
-        return output['output']
+        final_response = output['output']
+        speak(final_response, self.voice)
+        return {
+            'input': query,
+            'output': final_response
+        }
 
 
 if __name__ == "__main__":
