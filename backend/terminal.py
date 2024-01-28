@@ -19,7 +19,7 @@ def _get_platform() -> str:
     return system
 
 class AsyncShellTool(BaseTool):
-    """Tool to run shell commands."""
+    """Tool to run background shell commands."""
 
     name: str = "long running terminal"
     """Name of tool."""
