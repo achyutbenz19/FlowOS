@@ -7,7 +7,7 @@ voices = voices()
 voice_map = {
     voice.name: voice for voice in voices
 }
-def speak(text: str, voice: str = "Rachel"):
+def speak(text: str, voice: str = "Thomas"):
     voice = voice_map[voice]
     audio = generate(
     text=text,
