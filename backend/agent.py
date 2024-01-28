@@ -1,18 +1,18 @@
-import sys
-sys.path.append("")
 import platform
 from typing import Optional, List
 from pathlib import Path
 from langchain import hub
+from langchain_community.tools.shell.tool import ShellInput
 from langchain.agents import AgentExecutor, create_openai_tools_agent
-from langchain_community.tools import DuckDuckGoSearchRun, ShellTool, YouTubeSearchTool, tool
+from langchain_community.tools import DuckDuckGoSearchRun, ShellTool, YouTubeSearchTool, tool, Tool
 from langchain_community.utilities.stackexchange import StackExchangeAPIWrapper
 from langchain_openai import ChatOpenAI
 from langchain.memory import ConversationBufferWindowMemory
 from langchain.storage import LocalFileStore
 from langchain_core.prompts import SystemMessagePromptTemplate, PromptTemplate, ChatPromptTemplate, MessagesPlaceholder, HumanMessagePromptTemplate
 from pydantic import BaseModel, Field
-from backend.tts import speak
+from tts import speak
+from terminal import AsyncShellTool
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -30,13 +30,23 @@ def _get_platform() -> str:
         return "MacOS"
     return system
 
+async_shell_tool = AsyncShellTool()
+def long_running_terminal_command(command: str) -> str:
+    return async_shell_tool._run(command)
+
+long_shell_tool = Tool(
+    name="long_shell",
+    description=f"Run long running shell commands on this {_get_platform()} machine. Use this to run commands that take a long time/infinite to complete so that it can run in the background.",
+    func=long_running_terminal_command,
+)
 search_tool = DuckDuckGoSearchRun()
-shell_tool = ShellTool()
+short_shell_tool = ShellTool()
 youtube_tool = YouTubeSearchTool()
 stack_exchange_tool = tool(stack_exchange_search)
 
 tool_map = {
-    "shell": shell_tool,
+    "short_shell": short_shell_tool,
+    "long_shell": long_shell_tool,
     "youtube": youtube_tool,
     "search": search_tool,
     "stack_exchange": stack_exchange_tool
@@ -63,13 +73,13 @@ Make sure your response are as concise as possible. \
 
     chat_memory_k: int = Field(default=6)
 
-    tools: List[str] = ["shell", "youtube", "search"]
+    tools: List[str] = ["short_shell", "long_shell", "youtube", "search"]
 
     workflows_db_path: str = "workflows_db"
 
     verbose: bool = True
 
-    voice: str = "Rachel"
+    voice: str = "Thomas"
 
 class Agent:
     def __init__(
@@ -111,20 +121,23 @@ class Agent:
 
     def start_workflow(self, workflow_name: str):
         if self.in_workflow:
-            message = "Already in Workflow! Ignoring request."
+            message = f"You're already creating {self.workflow_name}. Complete it before creating another one"
             print(message)
+            speak(message, self.voice)
             return message
         
         self.in_workflow = True
         self.workflow_queries = []
         exists = self.db.mget([workflow_name])
         if exists[0]:
-            message = f"Workflow {workflow_name} already exists!"
+            message = f"I am sorry but the workflow {workflow_name} already exists"
             print(message)
+            speak(message, self.voice)
             return message
 
         self.workflow_name = workflow_name
-        message = f"Workflow {workflow_name} started! Recording..."
+        message = f"Recording {workflow_name}. Ask me anything"
+        speak(message, self.voice)
         print(message)
         return message
 

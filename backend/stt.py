@@ -20,7 +20,7 @@ def convert_to_mp3(wav_filename, mp3_filename):
     audio = AudioSegment.from_wav(wav_filename)
     audio.export(mp3_filename, format="mp3")
 
-def record_audio(output_filename, format=pyaudio.paInt16, channels=1, rate=44100, chunk=1024, silence_threshold=30, silence_duration=2):
+def record_audio(output_filename, format=pyaudio.paInt16, channels=1, rate=44100, chunk=1024, silence_threshold=62, silence_duration=1):
     """
     Record audio from the microphone until silence is detected.
 
@@ -32,6 +32,9 @@ def record_audio(output_filename, format=pyaudio.paInt16, channels=1, rate=44100
     :param silence_threshold: Silence threshold in dB (default is 30 dB).
     :param silence_duration: Duration of silence in seconds to stop recording (default is 2 seconds).
     """
+    global is_recording
+    is_recording = True
+
     def rms(frame):
         """Calculate the root mean square of the audio frame."""
         return audioop.rms(frame, 2)
@@ -52,7 +55,7 @@ def record_audio(output_filename, format=pyaudio.paInt16, channels=1, rate=44100
     silent_chunks = 0
     silent_for_duration = False
 
-    while True:
+    while is_recording:
         data = stream.read(chunk)
         rms_val = rms(data)
 
@@ -92,6 +95,10 @@ def record_audio(output_filename, format=pyaudio.paInt16, channels=1, rate=44100
         final_transcript += chunk['text'] + " "
     os.remove(output_file)
     return final_transcript
+
+def stop_recording():
+    global is_recording
+    is_recording = False 
 
 if __name__ == "__main__":
     audio = record_audio("output.wav")
