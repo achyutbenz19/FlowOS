@@ -30,9 +30,7 @@ struct SingleWorkflow: View {
         HStack {
             Image(systemName: "cube.transparent")
                 .font(Font.system(size: 14))
-                .foregroundColor(Color.white)
             Text(workflowName)
-                .foregroundColor(Color.white)
             Spacer()
         }
         .padding(.vertical, 4)
