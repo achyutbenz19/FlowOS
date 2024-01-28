@@ -74,11 +74,14 @@ struct CustomTextFieldWithButton: View {
             .cornerRadius(200)
             .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.clear))
             .padding([.leading], 8)
-            .onSubmit { // Add onSubmit modifier
-                            if !userInput.isEmpty {
-                                submitAction()
-                            }
-                        }
+            .onSubmit {
+                if userInput.isEmpty {
+                    activateMicrophone()
+                } else {
+                    submitAction()
+                }
+                userInput = ""
+            }
             .overlay(
                 HStack {
                     Spacer()
