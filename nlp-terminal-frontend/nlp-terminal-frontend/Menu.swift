@@ -16,9 +16,9 @@ struct Menu: View {
                     },
                     activateMicrophone: {
                     if isRecording {
-                        print("Recording stopped")
+                        activeMicrophone()
                     } else {
-                        print("Recording started")
+                        inactiveMicrophone()
                     }
                     isRecording.toggle()
                 })
@@ -50,12 +50,19 @@ struct Menu: View {
                 print("Error: (error)")
             } else if let data = data {
                 if let responseString = String(data: data, encoding: .utf8) {
-                    print("(responseString)")
+                    print("\(responseString)")
                 }
             }
         }
-
         task.resume()
+    }
+    
+    func activeMicrophone() {
+        print("Active")
+    }
+    
+    func inactiveMicrophone() {
+        print("Inactive")
     }
     
 }
